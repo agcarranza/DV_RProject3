@@ -1,5 +1,7 @@
 ---
-title: "Project 3"
+title: "Life Expectancy by Country"
+author: "Jorge Paramo, Aldo Carranza, Kevin Nievera"
+date: "Spring 2015"
 output: html_document
 ---
 
