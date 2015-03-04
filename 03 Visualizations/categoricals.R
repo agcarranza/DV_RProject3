@@ -3,11 +3,12 @@ categoricals <- eval(parse(text=substring(getURL(URLencode('http://129.152.144.8
 myplot <- function(df, x) {
   names(df) <- c("x", "n")
   ggplot(df, aes(x=x, y=n)) + geom_point()
-
+}
+  
 l <- list()
 for (i in names(categoricals)) { 
   if (i %in% categoricals[[1]]) {
-    r <- eval(parse(text=substring(getURL(URLencode('http://129.152.144.84:5001/rest/native/?query="select \\\""i"\\\", count(*) n from HEALTH_EXPENDITURES group by \\\""i"\\\" "'), httpheader=c(DB='jdbc:oracle:thin:@129.152.144.84:1521:ORCL', USER='C##cs329e_agc846', PASS='orcl_agc846', MODE='native_mode', MODEL='model', returnFor = 'R', returnDimensions = 'True', i=i), verbose = TRUE), 1, 2^31-1)))
+    r <- eval(parse(text=substring(getURL(URLencode('http://129.152.144.84:5001/rest/native/?query="select \\\""i"\\\", count(*) n from HEALTH_EXPENDITURE group by \\\""i"\\\" "'), httpheader=c(DB='jdbc:oracle:thin:@129.152.144.84:1521:ORCL', USER='C##cs329e_agc846', PASS='orcl_agc846', MODE='native_mode', MODEL='model', returnFor = 'R', returnDimensions = 'True', i=i), verbose = TRUE), 1, 2^31-1)))
     p <- myplot(r,i)
     print(p) 
     l[[i]] <- p
@@ -15,7 +16,7 @@ for (i in names(categoricals)) {
 }
 
 
-png("./03 Visualization/categoricals.png", width = 25, height = 20, units = "in", res = 72)
+png(file="categoricals.png", width = 25, height = 20, units = "in", res = 72)
 grid.newpage()
 pushViewport(viewport(layout = grid.layout(1, 4)))   
 
