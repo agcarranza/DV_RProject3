@@ -6,3 +6,4 @@ income_group_region$YEAR.y <- NULL
 
 uniques <- unique(income_group_region)
 
+
