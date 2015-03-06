@@ -4,50 +4,119 @@ author: "Jorge Paramo, Aldo Carranza, Kevin Nievera"
 date: "Spring 2015"
 output: html_document
 ---
-*Data sets can be found on the World Health Organization website
 
-The following are subsets of the datasets used for this project.
+* Data sets can be found on the World Health Organization website
+    + Health Expenditures: http://apps.who.int/gho/data/view.main.1920ALL?lang=en
+    + Life Expectancy: http://apps.who.int/gho/data/view.main.680
 
-***Life Expectancy***
+The following are previews of the datasets used for this project.
+
+*Load DataSets*
 ```{r,message=FALSE, warning=FALSE}
 source("../01 Data/data.R", echo=FALSE)
 ```
 
-```{r, results='asis',message=FALSE, warning=FALSE}
+```{r, results='asis',message=FALSE, warning=FALSE, echo=FALSE}
 knitr::kable(head(health), caption = "Health Expenditures by Country")
 ```
 
-```{r, results='asis',message=FALSE, warning=FALSE}
+```{r, results='asis',message=FALSE, warning=FALSE, echo=FALSE}
 knitr::kable(head(life), caption = "Life Expectancy by Country")
 ```
 
 
-##3 Interesting Data Wrangling Sets##
+##Three Interesting Data Wrangling Sets##
 ###Combined Data Sets and Visualizations###
-The following are the Data Sets that use the join function in the Combined Data Set column in the cheat sheet.
+The following are the Data Sets that use the join functions from the Combined Data Set column in the cheat sheet.
 
-##Inner Join##
-The following data displays the life expectancy at birth of each country for Males, Females and Both Sexes for the year 2000 in one table. In the second table, the total health expenditure of each country is displayed for the year 2000.  
-```{r}
-source("../01 Data/inner_join.R", echo=TRUE)
+###Inner Join###
+*Load Data Frames*
+```{r,message=FALSE, warning=FALSE}
+source("../01 Data/inner_join.R", echo=FALSE)
 ```
+The following data displays the life expectancy at birth of each country for Males, Females and Both Sexes for the year 2000 in one table. In the second table, the total health expenditure of each country is displayed for the year 2000.  
+
+__________________________________
+
+```{r, results='asis',message=FALSE, warning=FALSE, echo=FALSE}
+knitr::kable(head(life_exp), caption = "Life Expectancy vs. Country\n For Year 2000 ")
+```
+
+```{r, results='asis',message=FALSE, warning=FALSE, echo=FALSE}
+knitr::kable(head(ppp1), caption = "Health Expenditure vs. WHO Region\n For Year 2000")
+```
+
+__________________________________
 
 The data was joined using an inner join since there were less countries listed in the second table. The joined data was used to create a plot of the total health expenditure of each country with respect to the life expectancy.
-```{r}
-source("../02 Data Wrangling/life_vs_health.R", echo=TRUE)
+
+```{r,results='asis',message=FALSE, warning=FALSE, echo=FALSE}
+life_exp[1] <- lapply(life_exp[1], as.character)
+ppp1[1] <- lapply(ppp1[1], as.character)
+
+p1 <- inner_join(ppp1, life_exp)
+
+g1 <- ggplot(p1, aes(x=LIFE_EXPECTANCY, y=EXPENDITURE, color=SEX)) + geom_point(size=5)
+g1 + ggtitle("Life Expectancy vs. Health Expenditure") + theme(plot.title=element_text(size=18, face='bold', vjust=2)) + labs(x="Life Expectancy (years)", y="Expenditure (PPP)") + theme(axis.text.x=element_text(size=14), axis.text.y=element_text(size=14)) + scale_colour_tableau() + guides(colour = guide_legend(override.aes = list(size = 6)))
 ```
 
-##Right Join##
-
-##Full Join##
-The following data displays the income group of each country for Both Sexes for the year 2012 in the first table. In the second table, the region of each country is recorded for the year 2012.  
-```{r}
-source("../01 Data/full_join.R")
+###Right Join###
+*Load Data Frames*
+```{r,message=FALSE, warning=FALSE}
+source("../01 Data/right_join.R", echo=FALSE)
 ```
+In the first table, the data displays the specific World Bank Income Group for each World Health Organization Region, and the second table contains information on the average healthcare expenditure per capita for each WHO Region.
+
+__________________________________
+
+```{r, results='asis',message=FALSE, warning=FALSE, echo=FALSE}
+knitr::kable(head(income), caption = "World Bank Income Group by World Health Organization Region ")
+```
+
+```{r, results='asis',message=FALSE, warning=FALSE, echo=FALSE}
+knitr::kable(head(ppp2), caption = "Average Health Expenditure per capita by Region")
+```
+
+__________________________________
+
+The right join function was used here to try to discover which WHO Region spends the most on healthcare per capita. The right join of the data sets produced the average expenditure on health per capita based on the WHO Region.
+
+```{r,results='asis',message=FALSE, warning=FALSE, echo=FALSE}
+group <- income %>% group_by(WHO_REGION) %>% summarise(INCOME_GROUP=first(WORLD_BANK_INCOME_GROUP))
+p2 <- ppp2 %>% group_by(WHO_REGION) %>% summarise(avg=mean(EXPENDITURE), std=sd(EXPENDITURE))
+
+d2 <- right_join(group, p2)
+
+g2 <- ggplot(d2, aes(x=WHO_REGION, y=avg, fill=WHO_REGION)) + geom_bar(stat="identity")
+g2 + ggtitle("Average Health Expenditure per WHO Region") + theme(plot.title=element_text(size=18, face='bold', vjust=2)) + labs(x="WHO Region", y="Average Expenditure (PPP)") + theme(axis.text.x=element_text(size=12, angle=20), axis.text.y=element_text(size=14)) + scale_colour_tableau() + coord_flip()
+
+```
+
+###Full Join###
+*Load Data Frames*
+```{r,message=FALSE, warning=FALSE}
+source("../01 Data/full_join.R", echo=FALSE)
+```
+The following data displays the income group of each country for Both Sexes for the year 2012 in the first table. In the second table, the region of each country is recorded for the year 2012. 
+
+__________________________________
+
+```{r, results='asis',message=FALSE, warning=FALSE, echo=FALSE}
+knitr::kable(head(lifedf), caption = "Country and Income Group")
+```
+
+```{r, results='asis',message=FALSE, warning=FALSE, echo=FALSE}
+knitr::kable(head(healthdf), caption = "Country and Region")
+```
+
+__________________________________
 
 The data was joined using an full join.. The joined data was used to create a plot of the regions on the y-axis and countries on the x-axis. The legend informs the reader that the plot is for data collected in 2012, as well as the color codes for all of the levels of income of each country captured in the data.
-```{r}
-source("../02 Data Wrangling/income_group_vs_region.R")
+
+```{r,results='asis',message=FALSE, warning=FALSE, echo=FALSE}
+income_group_region <- left_join(lifedf, healthdf, by = "COUNTRY") %>% group_by(WHO_REGION);income_group_region$YEAR.x <- NULL; uniques <- unique(income_group_region); 
+
+uniques %>% ggplot(aes(x = COUNTRY, y = WHO_REGION)) + geom_point(aes(size = YEAR.y, color = WORLD_BANK_INCOME_GROUP)) + ggtitle("Income Groups and Region") + theme(plot.title=element_text(size=20, face="bold", vjust=2)) + labs(x="Country", y="Region") + theme(axis.text.x=element_blank()) + theme(axis.text.y=element_text(size=15)) + theme(axis.ticks.x=element_blank()) + theme(legend.title=element_blank()) + guides(colour=guide_legend(override.aes=list(size=4)), show_guide=FALSE)
 ```
 
 ##Categorical Columns##

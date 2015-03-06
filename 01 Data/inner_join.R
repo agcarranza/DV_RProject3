@@ -2,5 +2,5 @@ life_exp <- data.frame(fromJSON(getURL(URLencode('129.152.144.84:5001/rest/nativ
 
 ppp1 <- data.frame(fromJSON(getURL(URLencode('129.152.144.84:5001/rest/native/?query="select COUNTRY, EXPENDITURE from HEALTH_EXPENDITURE where INDICATOR like \\\'%total expenditure on health (PPP%\\\' and YEAR like \\\'%2000%\\\'"'),httpheader=c(DB='jdbc:oracle:thin:@129.152.144.84:1521:ORCL', USER='C##cs329e_agc846', PASS='orcl_agc846', MODE='native_mode', MODEL='model', returnDimensions = 'False', returnFor = 'JSON'), verbose = TRUE)))
 
-tbl_df(life_exp)
-tbl_df(ppp1)
+#tbl_df(life_exp)
+#tbl_df(ppp1)
