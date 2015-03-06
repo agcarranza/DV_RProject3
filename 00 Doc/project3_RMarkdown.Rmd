@@ -1,22 +1,50 @@
 ---
-title: "Life Expectancy by Country"
+title: "Life Expectancy and Health Expeditures by Country"
 author: "Jorge Paramo, Aldo Carranza, Kevin Nievera"
 date: "Spring 2015"
 output: html_document
 ---
+*Data sets can be found on the World Health Organization website
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+The following are subsets of the datasets used for this project.
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r}
-summary(cars)
+***Life Expectancy***
+```{r,message=FALSE, warning=FALSE}
+source("../01 Data/data.R", echo=FALSE)
 ```
 
-You can also embed plots, for example:
+```{r, results='asis',message=FALSE, warning=FALSE}
+knitr::kable(head(healthSpending), caption = "Health Expenditures by Country")
+```
+
+```{r, results='asis',message=FALSE, warning=FALSE}
+knitr::kable(head(lifeExpect), caption = "Life Expectancy by Country")
+```
+
+
+##3 Interesting Data Wrangling Sets##
+###Combined Data Sets and Visualizations###
+The following are the Data Sets that use the join function in the Combined Data Set column in the cheat sheet.
+
+##Inner Join##
+The following data displays the life expectancy at birth of each country for Males, Females and Both Sexes for the year 2000 in one table. In the second table, the total health expenditure of each country is displayed for the year 2000.  
+```{r}
+source("../01 Data/inner_join.R")
+```
+
+The data was joined using an inner join since there were less countries listed in the second table. The joined data was used to create a plot of the total health expenditure of each country with respect to the life expectancy.
+```{r}
+source("../02 Data Wrangling/life_vs_health.R")
+```
+
+##Right Join##
+
+##Full Join##
+
+##Categorical Columns##
+
+##Measure Columns##
 
 ```{r, echo=FALSE}
-plot(cars)
-```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+```
