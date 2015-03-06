@@ -40,6 +40,15 @@ source("../02 Data Wrangling/life_vs_health.R")
 ##Right Join##
 
 ##Full Join##
+The following data displays the income group of each country for Both Sexes for the year 2012 in the first table. In the second table, the region of each country is recorded for the year 2012.  
+```{r}
+source("../01 Data/full_join.R")
+```
+
+The data was joined using an full join.. The joined data was used to create a plot of the regions on the y-axis and countries on the x-axis. The legend informs the reader that the plot is for data collected in 2012, as well as the color codes for all of the levels of income of each country captured in the data.
+```{r}
+source("../02 Data Wrangling/income_group_vs_region.R")
+```
 
 ##Categorical Columns##
 
