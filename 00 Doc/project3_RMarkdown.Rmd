@@ -14,11 +14,11 @@ source("../01 Data/data.R", echo=FALSE)
 ```
 
 ```{r, results='asis',message=FALSE, warning=FALSE}
-knitr::kable(head(healthSpending), caption = "Health Expenditures by Country")
+knitr::kable(head(health), caption = "Health Expenditures by Country")
 ```
 
 ```{r, results='asis',message=FALSE, warning=FALSE}
-knitr::kable(head(lifeExpect), caption = "Life Expectancy by Country")
+knitr::kable(head(life), caption = "Life Expectancy by Country")
 ```
 
 
@@ -29,12 +29,12 @@ The following are the Data Sets that use the join function in the Combined Data 
 ##Inner Join##
 The following data displays the life expectancy at birth of each country for Males, Females and Both Sexes for the year 2000 in one table. In the second table, the total health expenditure of each country is displayed for the year 2000.  
 ```{r}
-source("../01 Data/inner_join.R")
+source("../01 Data/inner_join.R", echo=TRUE)
 ```
 
 The data was joined using an inner join since there were less countries listed in the second table. The joined data was used to create a plot of the total health expenditure of each country with respect to the life expectancy.
 ```{r}
-source("../02 Data Wrangling/life_vs_health.R")
+source("../02 Data Wrangling/life_vs_health.R", echo=TRUE)
 ```
 
 ##Right Join##
