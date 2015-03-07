@@ -43,7 +43,7 @@ knitr::kable(head(life_exp), caption = "Life Expectancy vs. Country\n For Year 2
 ```
 
 ```{r, results='asis',message=FALSE, warning=FALSE, echo=FALSE}
-knitr::kable(head(ppp1), caption = "Health Expenditure vs. WHO Region\n For Year 2000")
+knitr::kable(head(ppp1), caption = "Health Expenditure vs. Country\n For Year 2000")
 ```
 
 __________________________________
@@ -70,11 +70,11 @@ In the first table, the data displays the specific World Bank Income Group for e
 __________________________________
 
 ```{r, results='asis',message=FALSE, warning=FALSE, echo=FALSE}
-knitr::kable(head(income), caption = "World Bank Income Group by World Health Organization Region ")
+knitr::kable(head(worldIncomeGroup), caption = "World Bank Income Group by World Health Organization Region ")
 ```
 
 ```{r, results='asis',message=FALSE, warning=FALSE, echo=FALSE}
-knitr::kable(head(ppp2), caption = "Average Health Expenditure per capita by Region")
+knitr::kable(head(healthExpenses), caption = "Health Expenditure per capita by Region and Country")
 ```
 
 __________________________________
@@ -82,14 +82,15 @@ __________________________________
 The right join function was used here to try to discover which WHO Region spends the most on healthcare per capita. The right join of the data sets produced the average expenditure on health per capita based on the WHO Region.
 
 ```{r,results='asis',message=FALSE, warning=FALSE, echo=FALSE}
-group <- income %>% group_by(WHO_REGION) %>% summarise(INCOME_GROUP=first(WORLD_BANK_INCOME_GROUP))
-p2 <- ppp2 %>% group_by(WHO_REGION) %>% summarise(avg=mean(EXPENDITURE), std=sd(EXPENDITURE))
+group <- worldIncomeGroup %>% group_by(WHO_REGION) %>% summarise(INCOME_GROUP=first(WORLD_BANK_INCOME_GROUP))
+
+p2 <- healthExpenses %>% group_by(WHO_REGION) %>% summarise(avg=mean(EXPENDITURE), std=sd(EXPENDITURE))
 
 d2 <- right_join(group, p2)
 
 g2 <- ggplot(d2, aes(x=WHO_REGION, y=avg, fill=WHO_REGION)) + geom_bar(stat="identity")
-g2 + ggtitle("Average Health Expenditure per WHO Region") + theme(plot.title=element_text(size=18, face='bold', vjust=2)) + labs(x="WHO Region", y="Average Expenditure (PPP)") + theme(axis.text.x=element_text(size=12, angle=20), axis.text.y=element_text(size=14)) + scale_colour_tableau() + coord_flip()
 
+g2 + ggtitle("Average Health Expenditure per WHO Region") + theme(plot.title=element_text(size=18, face='bold', vjust=2)) + labs(x="WHO Region", y="Average Expenditure (PPP)") + theme(axis.text.x=element_text(size=12, angle=20), axis.text.y=element_text(size=14)) + scale_colour_tableau() + coord_flip()
 ```
 
 ###Full Join###
@@ -119,10 +120,17 @@ income_group_region <- left_join(lifedf, healthdf, by = "COUNTRY") %>% group_by(
 uniques %>% ggplot(aes(x = COUNTRY, y = WHO_REGION)) + geom_point(aes(size = YEAR.y, color = WORLD_BANK_INCOME_GROUP)) + ggtitle("Income Groups and Region") + theme(plot.title=element_text(size=20, face="bold", vjust=2)) + labs(x="Country", y="Region") + theme(axis.text.x=element_blank()) + theme(axis.text.y=element_text(size=15)) + theme(axis.ticks.x=element_blank()) + theme(legend.title=element_blank()) + guides(colour=guide_legend(override.aes=list(size=4)), show_guide=FALSE)
 ```
 
-##Categorical Columns##
+*The following are graphs made using lists and functions from the* **ListsForIfFunctionsPNG.R file** *, and they may not make much sense.*
+*They were made to experiment with functions and list*
 
-##Measure Columns##
+###Categorical Columns###
+*Categorical variables shown here*: **Indicator, WHO Region, and Country**
+```{r,message=FALSE, warning=FALSE}
+source("../03 Visualizations/categoricals.R", echo=FALSE)
+```
 
-```{r, echo=FALSE}
-
+###Measure Columns###
+*Quantative variables shown here*: **Year and Health Expenditure**
+```{r,message=FALSE, warning=FALSE}
+source("../03 Visualizations/measures.R", echo=FALSE)
 ```
